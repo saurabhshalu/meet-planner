@@ -4,6 +4,7 @@ const dotenv = require("dotenv");
 require("https").globalAgent.options.rejectUnauthorized = false;
 dotenv.config({});
 
+const DB = require("./config/db");
 const passportSetup = require("./passport");
 const passport = require("passport");
 const cors = require("cors");
@@ -30,7 +31,9 @@ app.use(
   })
 );
 
-app.get("/", (req, res) => {
+app.get("/", async (req, res) => {
+  const data = await DB.query_promise("SELECT * FROM user", []);
+  console.log(data);
   res.json({ success: true });
 });
 
