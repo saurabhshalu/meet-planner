@@ -1,7 +1,7 @@
 const express = require("express");
 const cookieSession = require("cookie-session");
 const dotenv = require("dotenv");
-
+require("https").globalAgent.options.rejectUnauthorized = false;
 dotenv.config({});
 
 const passportSetup = require("./passport");

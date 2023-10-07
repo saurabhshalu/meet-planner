@@ -37,17 +37,27 @@ function App() {
     <>
       {user ? (
         <div>
-          Hello user... <button onClick={logout}>Logout</button>
+          Hello {user.displayName}... <button onClick={logout}>Logout</button>
         </div>
       ) : (
-        <button
-          className="bg-slate-500 px-10 py-2 border-0"
-          onClick={() => {
-            window.open("http://localhost:8000/auth/google", "_self");
-          }}
-        >
-          Login with google
-        </button>
+        <>
+          <button
+            className="bg-slate-500 px-10 py-2 border-0"
+            onClick={() => {
+              window.open("http://localhost:8000/auth/google", "_self");
+            }}
+          >
+            Login with google
+          </button>
+          <button
+            className="bg-slate-500 px-10 py-2 border-0"
+            onClick={() => {
+              window.open("http://localhost:8000/auth/microsoft", "_self");
+            }}
+          >
+            Login with Microsoft
+          </button>
+        </>
       )}
     </>
   );
