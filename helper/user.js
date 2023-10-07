@@ -3,42 +3,31 @@ const axios = require("axios");
 const CryptoJS = require("crypto-js");
 
 const fetchUserByEmail = async (email) => {
-  const data = await DB.query_promise(
-    "SELECT * FROM v_userData WHERE Email = ?",
-    [email]
-  );
-  console.log(data);
+  try {
+    const data = await DB.query_promise(
+      "SELECT * FROM v_userData WHERE Email = ?",
+      [email]
+    );
+    console.log("data=>", data);
+    return data.length > 0;
+  } catch (error) {
+    return false;
+  }
 };
 
 const insertUserDetails = async (dataObj) => {
   try {
-    const isVerified = dataObj.googleId || dataObj.microsoftId;
-
     const { email, password, displayName, photoUrl, provider } = dataObj;
 
     const data = await DB.query_promise(
       "INSERT INTO user(Email, Password, DisplayName, PhotoUrl, Provider, isVerified) VALUES (?, ?, ?, ?, ?, ?)",
-      [email, password, displayName, photoUrl, provider, isVerified]
+      [email, password, displayName, photoUrl, provider, false]
     );
 
-    if (data.insertedId) {
-      if (dataObj.googleId) {
-        await DB.query_promise(
-          "INSERT INTO user(UserId, GoogleId) VALUES (?, ?)",
-          [data.insertedId, dataObj.googleId]
-        );
-      }
-      if (dataObj.microsoftId) {
-        await DB.query_promise(
-          "INSERT INTO user(UserId, MicrosoftId) VALUES (?, ?)",
-          [data.insertedId, dataObj.microsoftId]
-        );
-      }
-    }
-
-    return "SUCCESS";
-  } catch {
-    return "ERROR";
+    return true;
+  } catch (e) {
+    console.log(e);
+    return false;
   }
 };
 

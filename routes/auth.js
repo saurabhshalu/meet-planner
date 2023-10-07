@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const passport = require("passport");
-
+const { fetchUserByEmail, insertUserDetails } = require("../helper/user");
+const { sendEmail } = require("../helper/helper");
 const CLIENT_URL = "http://localhost:5173/";
 
 router.get("/login/success", (req, res) => {
@@ -52,5 +53,61 @@ router.get(
     failureRedirect: "/login/failed",
   })
 );
+
+router.post("/local/registration", async (req, res) => {
+  try {
+    const { email, password, displayName } = req.body;
+    if (!email.trim() || !password.trim() || !displayName.trim()) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Please provide valid details" });
+    }
+    const user = await fetchUserByEmail(email);
+
+    if (user) {
+      return res
+        .status(400)
+        .json({ success: false, message: "User already exist." });
+    }
+
+    const newUser = await insertUserDetails({
+      email,
+      password,
+      displayName,
+      provider: "local",
+    });
+
+    if (newUser) {
+      //send otp
+
+      const emailSent = await sendEmail({
+        email,
+        subjectLine: "Your OTP",
+        bodyHtml: "<h1>This is your OTP: 6666</h1>",
+      });
+
+      if (!emailSent) {
+        return res.status(500).json({
+          success: false,
+          message: "Failed to send OTP, but account created, please login.",
+        });
+      }
+
+      return res
+        .status(201)
+        .json({ success: true, otpSent: emailSent, message: "OTP Sent" });
+    } else {
+      return res.status(500).json({
+        success: false,
+        message: "Somethinge went wrong, please try again.",
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Something went wrong." });
+  }
+});
 
 module.exports = router;
