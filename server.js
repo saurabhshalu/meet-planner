@@ -5,6 +5,7 @@ require("https").globalAgent.options.rejectUnauthorized = false;
 dotenv.config({});
 
 const DB = require("./config/db");
+
 const passportSetup = require("./passport");
 const passport = require("passport");
 const cors = require("cors");
