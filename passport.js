@@ -30,8 +30,8 @@ passport.use(
       clientID: MICROSOFT_CLIENT_ID,
       clientSecret: MICROSOFT_CLIENT_SECRET,
       callbackURL: "/auth/microsoft/callback",
-      scope: ["openid", "profile", "email"],
-      tenant: "common",
+      scope: ["openid", "email", "profile"],
+      tenant: process.env.MICROSOFT_TENANT,
     },
     function (accessToken, refreshToken, profile, done) {
       done(null, profile);
