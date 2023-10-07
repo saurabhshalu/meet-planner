@@ -1,0 +1,29 @@
+{
+  "name": "meet-planner",
+  "version": "1.0.0",
+  "description": "Cookies Creation",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js --ignore frontend/*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/saurabhshalu/meet-planner.git"
+  },
+  "author": "Cookies",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/saurabhshalu/meet-planner/issues"
+  },
+  "homepage": "https://github.com/saurabhshalu/meet-planner#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "firebase-admin": "^11.11.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
