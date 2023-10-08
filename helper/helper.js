@@ -1,4 +1,5 @@
 const nodemailer = require("nodemailer");
+const crypto = require("crypto");
 
 const sendEmail = async (payload) => {
   try {
@@ -25,6 +26,15 @@ const sendEmail = async (payload) => {
   }
 };
 
+const generatePassword = (
+  length = 8,
+  wishlist = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+) =>
+  Array.from(crypto.randomFillSync(new Uint32Array(length)))
+    .map((x) => wishlist[x % wishlist.length])
+    .join("");
+
 module.exports = {
   sendEmail,
+  generatePassword,
 };
