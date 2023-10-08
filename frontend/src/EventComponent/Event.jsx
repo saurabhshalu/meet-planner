@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import EventList from "./EventList/EventList";
 import EventCalView from "./EventCalView/EventCalView";
@@ -38,7 +37,7 @@ export default function Events() {
     callAPI();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const listItems = apiData.success ? apiData.message : [];
+  const listItems = apiData?.success ? apiData.message : [];
 
   return (
     <>
@@ -81,7 +80,11 @@ export default function Events() {
               </div>
             </nav>
 
-            {mode ? <EventList /> : <EventCalView />}
+            {mode ? (
+              <EventList items={listItems} />
+            ) : (
+              <EventCalView items={listItems} />
+            )}
           </>
         ) : (
           <div>
