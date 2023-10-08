@@ -35,6 +35,7 @@ function App() {
 
   return (
     <>
+      <button>Login ME</button>
       {/* {user ? (
         <div>
           Hello {user.displayName}... <button onClick={logout}>Logout</button>

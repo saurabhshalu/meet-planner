@@ -15,8 +15,10 @@ passport.use(
       clientID: GOOGLE_CLIENT_ID,
       clientSecret: GOOGLE_CLIENT_SECRET,
       callbackURL: "/auth/google/callback",
+      accessType: "offline",
     },
-    function (accessToken, refreshToken, profile, done) {
+    (accessToken, refreshToken, profile, done) => {
+      console.log("HELLO_Hello=>", refreshToken);
       done(null, profile);
       //   User.findOrCreate({ googleId: profile.id }, function (err, user) {
       //     return cb(err, user);

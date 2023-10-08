@@ -9,7 +9,18 @@ const axios = require("axios");
 const CLIENT_URL = "http://localhost:5173/";
 
 const { google } = require("googleapis");
+const {
+  urlGoogle,
+  defaultScope,
+  getGoogleAccountFromCode,
+} = require("../helper/google-util");
 const OAuth2 = google.auth.OAuth2;
+
+router.get("/loginme", (req, res) => {
+  const my_url = urlGoogle();
+  console.log("MY_URL=>", my_url);
+  res.redirect(my_url);
+});
 
 router.get("/login/success", (req, res) => {
   if (req.user) {
@@ -41,15 +52,13 @@ router.get("/logout", (req, res) => {
 router.get(
   "/google",
   passport.authenticate("google", {
-    scope: [
-      "https://www.googleapis.com/auth/calendar.events.freebusy",
-      "https://www.googleapis.com/auth/calendar.events",
-    ],
+    scope: defaultScope,
+    accessType: "offline",
   })
 );
 
 router.get("/google/callback", async (req, res) => {
-  console.log("req.query=>", req.query);
+  // console.log("req.query=>", req.query);
   const { code, scope } = req.query;
 
   try {
@@ -57,43 +66,37 @@ router.get("/google/callback", async (req, res) => {
       throw new Error("Code not found.");
     }
 
-    const requestBody = {
-      code,
-      scope,
-      client_id: process.env.GOOGLE_CLIENT_ID,
-      client_secret: process.env.GOOGLE_CLIENT_SECRET,
-      redirect_uri: "http%3A%2F%2Flocalhost%3A5173",
-      grant_type: "authorization_code",
-    };
+    getGoogleAccountFromCode(code, async (err, userInfo) => {
+      if (err) {
+        console.log("err=======>", err);
+        res.redirect(`${CLIENT_URL}?success=false`);
+      } else {
+        if (userInfo.refresh_token) {
+          const myUser = await userModel.findOne({ email: userInfo.email });
+          myUser.google = {
+            access_token: userInfo.accessToken,
+            refresh_token: userInfo.refresh_token,
+            expiry_date: userInfo.expiry_date,
+          };
 
-    const { data } = await axios.post(
-      "https://oauth2.googleapis.com/token",
-      requestBody,
-      {
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
+          await myUser.save();
+        }
+        res.redirect(`${CLIENT_URL}?success=true`);
       }
-    );
-
-    console.log("data=>", data);
-    console.log("Access Token:", data.access_token);
-    console.log("Refresh Token:", data.refresh_token);
-
-    res.redirect(`${CLIENT_URL}?success=true`);
+    });
   } catch (error) {
     console.log(error);
     res.redirect(CLIENT_URL);
   }
 });
 
-router.get(
-  "/google/callback",
-  passport.authenticate("google", {
-    successRedirect: CLIENT_URL,
-    failureRedirect: "/login/failed",
-  })
-);
+// router.get(
+//   "/google/callback",
+//   passport.authenticate("google", {
+//     successRedirect: CLIENT_URL,
+//     failureRedirect: "/login/failed",
+//   })
+// );
 
 router.get(
   "/microsoft",

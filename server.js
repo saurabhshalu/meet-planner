@@ -10,6 +10,7 @@ const passportSetup = require("./passport");
 const passport = require("passport");
 const cors = require("cors");
 const authRoute = require("./routes/auth");
+const eventsRoute = require("./routes/events");
 
 const app = express();
 
@@ -43,6 +44,7 @@ app.get("/", async (req, res) => {
 });
 
 app.use("/auth", authRoute);
+app.use("/events", eventsRoute);
 
 app.listen(
   process.env.PORT,
