@@ -4,6 +4,8 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import FullScreenLoader from "../Components/FullScreenLoader.jsx";
 import OtpVerification from "../OtpVerification/OtpVerification.jsx";
+import useAuthenticated from "../hooks/useAuthenticated.js";
+import { Navigate } from "react-router-dom";
 
 export default function Register() {
   const [displayName, setDisplayName] = useState("");
@@ -48,6 +50,10 @@ export default function Register() {
       setLoading(false);
     }
   };
+  const { loggedIn } = useAuthenticated();
+  if (loggedIn) {
+    return <Navigate to="/dashboard" replace={true} />;
+  }
   if (email && otpSent) {
     return <OtpVerification email={email} />;
   }

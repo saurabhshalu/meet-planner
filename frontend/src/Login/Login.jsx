@@ -1,9 +1,11 @@
 import { useState } from "react";
 import LoginRegisterHeader from "../LoginRegisterHeader/LoginRegisterHeader.jsx";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import useAuthenticated from "../hooks/useAuthenticated.js";
+import FullScreenLoader from "../Components/FullScreenLoader.jsx";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -35,9 +37,14 @@ function Login() {
       setLoading(false);
     }
   };
-  console.log(loading);
+
+  const { loggedIn } = useAuthenticated();
+  if (loggedIn) {
+    return <Navigate to="/dashboard" replace={true} />;
+  }
   return (
     <>
+      {loading && <FullScreenLoader />}
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <LoginRegisterHeader isWhat="Login" />
 
