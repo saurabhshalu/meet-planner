@@ -31,6 +31,11 @@ router.post("/InsertPlannerDetails", async (req, res) => {
   }
 });
 
+router.post("GenerateMeetingEvent", async (req, res) => {
+  try {
+  } catch {}
+});
+
 async function checkUniqueLink(linkText) {
   try {
     if (!linkText && linkText?.length === 0) return false;
