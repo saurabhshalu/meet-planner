@@ -1,50 +1,56 @@
+import { useState } from "react";
 import DayName from "./DayName";
 
 export default function SlotSelection() {
+  const [data, setData] = useState({});
+
   const defaultData = [
     {
       dayOfWeek: 0,
-      startTime: "09:00",
-      endTime: "17:00",
+      startTime: "09:00:00",
+      endTime: "17:00:00:00",
       isAvailable: false,
     },
     {
       dayOfWeek: 1,
-      startTime: "09:00",
-      endTime: "17:00",
+      startTime: "09:00:00",
+      endTime: "17:00:00",
       isAvailable: true,
     },
     {
       dayOfWeek: 2,
-      startTime: "09:00",
-      endTime: "17:00",
+      startTime: "09:00:00",
+      endTime: "17:00:00",
       isAvailable: true,
     },
     {
       dayOfWeek: 3,
-      startTime: "09:00",
-      endTime: "17:00",
+      startTime: "09:00:00",
+      endTime: "17:00:00",
       isAvailable: true,
     },
     {
       dayOfWeek: 4,
-      startTime: "09:00",
-      endTime: "17:00",
+      startTime: "09:00:00",
+      endTime: "17:00:00",
       isAvailable: true,
     },
     {
       dayOfWeek: 5,
-      startTime: "09:00",
-      endTime: "17:00",
+      startTime: "09:00:00",
+      endTime: "17:00:00",
       isAvailable: true,
     },
     {
       dayOfWeek: 6,
-      startTime: "09:00",
-      endTime: "17:00",
+      startTime: "09:00:00",
+      endTime: "17:00:00",
       isAvailable: false,
     },
   ];
+
+  data.timeslots = defaultData;
+
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -56,7 +62,7 @@ export default function SlotSelection() {
             <h2 className="text-lg font-bold my-2">Set your weekly hours</h2>
             <div className="flex flex-col	">
               <span className="flex justify-between">
-                <h3 className="mb-5 text-lg font-medium text-gray-700 dark:text-white">
+                <h3 className="mb-5 text-lg font-medium text-gray-700 ">
                   Choose a duration:
                 </h3>
                 <ul className="grid w-full gap-6 md:grid-cols-3">
