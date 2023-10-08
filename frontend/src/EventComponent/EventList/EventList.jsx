@@ -1,16 +1,15 @@
-
 /* eslint-disable react/jsx-key */
 /* eslint-disable react/prop-types */
 import EventItem from "./EventItem/EventItem";
 
-export default function EventList({ objList }) {
+export default function EventList({ items = [] }) {
   return (
-    <>
-      {objList?.map((x) => (
+    <div className="flex gap-5 flex-wrap">
+      {items?.map((x) => (
         <>
-          <EventItem data={x} />
+          <EventItem key={x.id} data={x} />
         </>
       ))}
-    </>
+    </div>
   );
 }
