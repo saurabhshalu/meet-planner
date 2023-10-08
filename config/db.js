@@ -1,63 +1,13 @@
-const mysql = require("mysql");
+const mongoose = require("mongoose");
 
-console.log(process.env.MYSQL_SERVER);
-
-const pool = mysql.createPool({
-  connectionLimit: 10,
-  host: process.env.MYSQL_SERVER,
-  user: process.env.DB_USERNAME,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-  timezone: "utc",
-});
-
-const DB = (function () {
-  function _query(query, params, callback) {
-    pool.getConnection(function (err, connection) {
-      if (err) {
-        console.error("ERROR: releasing connection.");
-        connection.release();
-        callback(null, err);
-        throw err;
-      }
-
-      connection.query(query, params, function (err, rows) {
-        connection.release();
-        if (!err) {
-          callback(rows);
-        } else {
-          callback(null, err);
-        }
-      });
-    });
+const connectDB = async () => {
+  try {
+    const conn = await mongoose.connect(process.env.MONGO_URI);
+    console.log(`MongoDB connected: ${conn.connection.host}`);
+  } catch (error) {
+    console.error("error=>", error.message);
+    process.exit(1);
   }
+};
 
-  const _query_promise = (query, params) => {
-    return new Promise((resolve, reject) => {
-      console.log(query, params);
-      pool.getConnection(function (err, connection) {
-        if (err) {
-          console.error("ERROR: releasing connection.", err);
-          connection.release();
-          reject(err);
-        }
-
-        connection.query(query, params, function (err, rows) {
-          connection.release();
-          if (!err) {
-            resolve(rows);
-          } else {
-            reject(err);
-          }
-        });
-      });
-    });
-  };
-
-  return {
-    query: _query,
-    query_promise: _query_promise,
-  };
-})();
-
-module.exports = DB;
+module.exports = connectDB;
