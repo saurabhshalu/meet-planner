@@ -5,9 +5,9 @@ import useAuthenticated from "../hooks/useAuthenticated";
 const ProtectedRoute = ({ children }) => {
   const { loggedIn } = useAuthenticated();
 
-  // if (!loggedIn) {
-  //   return <Navigate to="/" />;
-  // }
+  if (!loggedIn) {
+    return <Navigate to="/" />;
+  }
   return children;
 };
 

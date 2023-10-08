@@ -9,6 +9,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import EventList from "./EventComponent/Event";
 import ProtectedRoute from "./Components/ProtectedRoute";
+import TestSlotBookingScreen from "./TestSlotBookingScreen";
 
 function App() {
   const routes = createBrowserRouter([
@@ -41,54 +42,14 @@ function App() {
       ),
     },
     {
-      path: "/dashboard",
-      element: <EventList />,
+      path: "/appointment/:uniqueId",
+      element: <TestSlotBookingScreen />,
     },
   ]);
-  // const [user, setUser] = useState(null);
-
-  // useEffect(() => {
-  //   const getUser = () => {
-  //     fetch("http://localhost:8000/auth/login/success", {
-  //       method: "GET",
-  //       credentials: "include",
-  //       headers: {
-  //         Accept: "application/json",
-  //         "Content-Type": "application/json",
-  //         "Access-Control-Allow-Credentials": true,
-  //       },
-  //     })
-  //       .then((response) => {
-  //         if (response.status === 200) return response.json();
-  //         throw new Error("authentication has been failed!");
-  //       })
-  //       .then((resObject) => {
-  //         setUser(resObject.user);
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //         setUser(null);
-  //       });
-  //   };
-  //   getUser();
-  // }, []);
-
-  // const logout = () => {
-  //   window.open("http://localhost:8000/auth/logout", "_self");
-  // };
-
   return (
     <>
       <RouterProvider router={routes} />
-      <ToastContainer>
-        {/* {user && (
-          <div>
-            Hello {user.displayName}... <button onClick={logout}>Logout</button>
-          </div>
-        )} */}
-
-        {/* <Login /> */}
-      </ToastContainer>
+      <ToastContainer></ToastContainer>
     </>
   );
 }
