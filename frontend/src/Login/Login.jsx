@@ -28,7 +28,7 @@ function Login() {
       }
 
       window.localStorage.setItem("user", JSON.stringify(data.message));
-      navigate("/Dashboard");
+      navigate("/dashboard");
     } catch (error) {
       toast.error(error?.response?.data?.message || error.message);
     } finally {

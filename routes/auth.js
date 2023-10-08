@@ -167,7 +167,6 @@ router.post("/local/otp/validate", async (req, res) => {
     console.log(req.body.email, req.body.otp);
     const myOTP = await emailVerification.findOne({
       email: req.body.email,
-      // otp: req.body.otp,x
     });
     console.log("myOTP=>", myOTP);
     if (myOTP) {

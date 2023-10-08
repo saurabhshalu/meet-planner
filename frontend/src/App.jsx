@@ -6,6 +6,7 @@ import OtpVerification from "./OtpVerification/OtpVerification";
 import SlotSelection from "./SlotSelection/SlotSelection";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import EventList from "./EventComponent/Event";
 function App() {
   const routes = createBrowserRouter([
     {
@@ -23,6 +24,10 @@ function App() {
     {
       path: "/Slots",
       element: <SlotSelection />,
+    },
+    {
+      path: "/dashboard",
+      element: <EventList />,
     },
   ]);
   // const [user, setUser] = useState(null);
