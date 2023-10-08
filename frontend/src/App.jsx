@@ -64,7 +64,6 @@ function App() {
           Hello {user.displayName}... <button onClick={logout}>Logout</button>
         </div>
       )}
-
       {/* <Login /> */}
     </>
   );
