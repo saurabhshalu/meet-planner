@@ -18,16 +18,30 @@ const userSchema = mongoose.Schema({
     type: Boolean,
     default: false,
   },
-  googleOauth: {
-    type: String,
-    default: null,
+  google: {
+    access_token: {
+      type: String,
+    },
+    refresh_token: {
+      type: String,
+    },
+    expiry_date: {
+      type: Date,
+    },
   },
-  microsoftOauth: {
-    type: String,
+  microsoft: {
+    access_token: {
+      type: String,
+    },
+    refresh_token: {
+      type: String,
+    },
+    expiry_date: {
+      type: Date,
+    },
   },
   customURL: {
     type: String,
-    unique: true,
   },
   timezone: {
     tyep: String,
