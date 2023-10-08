@@ -10,17 +10,10 @@ const CLIENT_URL = "http://localhost:5173/";
 
 const { google } = require("googleapis");
 const {
-  urlGoogle,
   defaultScope,
   getGoogleAccountFromCode,
 } = require("../helper/google-util");
 const OAuth2 = google.auth.OAuth2;
-
-router.get("/loginme", (req, res) => {
-  const my_url = urlGoogle();
-  console.log("MY_URL=>", my_url);
-  res.redirect(my_url);
-});
 
 router.get("/login/success", (req, res) => {
   if (req.user) {
@@ -89,14 +82,6 @@ router.get("/google/callback", async (req, res) => {
     res.redirect(CLIENT_URL);
   }
 });
-
-// router.get(
-//   "/google/callback",
-//   passport.authenticate("google", {
-//     successRedirect: CLIENT_URL,
-//     failureRedirect: "/login/failed",
-//   })
-// );
 
 router.get(
   "/microsoft",
@@ -182,14 +167,11 @@ router.post("/local/otp/validate", async (req, res) => {
     console.log(req.body.email, req.body.otp);
     const myOTP = await emailVerification.findOne({
       email: req.body.email,
-      // otp: req.body.otp,x
     });
     console.log("myOTP=>", myOTP);
     if (myOTP) {
       if (myOTP.otp !== req.body.otp) {
-        return res
-          .status(400)
-          .json({ success: false, message: "Invalid OTP1" });
+        return res.status(400).json({ success: false, message: "Invalid OTP" });
       }
       const myUser = await userModel.findOne({ email: req.body.email });
       myUser.isVerified = true;
@@ -198,10 +180,45 @@ router.post("/local/otp/validate", async (req, res) => {
         .status(200)
         .json({ success: true, message: "Account verified successfully." });
     }
-    return res.status(400).json({ success: false, message: "Invalid OTP2" });
+    return res.status(400).json({ success: false, message: "Invalid OTP" });
   } catch (error) {
     console.log(error);
-    return res.status(400).json({ success: false, message: "Invalid OTP3" });
+    return res.status(400).json({ success: false, message: "Invalid OTP" });
+  }
+});
+
+router.post(
+  "/local/login",
+  passport.authenticate("local", {
+    successRedirect: "http://localhost:5173",
+    failureRedirect: "http://localhost:5173",
+  })
+);
+
+router.post("/local/loginme", async (req, res) => {
+  try {
+    const myUser = await userModel.findOne({ email: req.body.email });
+    console.log("myUser--->", myUser);
+
+    if (!myUser) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Email or password invalid." });
+    }
+    if (myUser.password !== md5(req.body.password)) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Email or password invalid." });
+    }
+    return res.status(200).json({
+      success: true,
+      message: { displayName: myUser.displayName, email: myUser.email },
+    });
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(400)
+      .json({ success: false, message: "Email or password invalid." });
   }
 });
 
