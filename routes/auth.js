@@ -5,8 +5,11 @@ const { sendEmail, generatePassword } = require("../helper/helper");
 const userModel = require("../models/userModel");
 const emailVerification = require("../models/emailVerification");
 const md5 = require("md5");
-
+const axios = require("axios");
 const CLIENT_URL = "http://localhost:5173/";
+
+const { google } = require("googleapis");
+const OAuth2 = google.auth.OAuth2;
 
 router.get("/login/success", (req, res) => {
   if (req.user) {
@@ -47,7 +50,41 @@ router.get(
 
 router.get("/google/callback", async (req, res) => {
   console.log("req.query=>", req.query);
-  res.redirect(`${CLIENT_URL}`);
+  const { code, scope } = req.query;
+
+  try {
+    if (!code) {
+      throw new Error("Code not found.");
+    }
+
+    const requestBody = {
+      code,
+      scope,
+      client_id: process.env.GOOGLE_CLIENT_ID,
+      client_secret: process.env.GOOGLE_CLIENT_SECRET,
+      redirect_uri: "http%3A%2F%2Flocalhost%3A5173",
+      grant_type: "authorization_code",
+    };
+
+    const { data } = await axios.post(
+      "https://oauth2.googleapis.com/token",
+      requestBody,
+      {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      }
+    );
+
+    console.log("data=>", data);
+    console.log("Access Token:", data.access_token);
+    console.log("Refresh Token:", data.refresh_token);
+
+    res.redirect(`${CLIENT_URL}?success=true`);
+  } catch (error) {
+    console.log(error);
+    res.redirect(CLIENT_URL);
+  }
 });
 
 router.get(
