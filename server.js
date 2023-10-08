@@ -11,6 +11,7 @@ const passport = require("passport");
 const cors = require("cors");
 const authRoute = require("./routes/auth");
 const eventsRoute = require("./routes/events");
+const plannerRoute = require("./routes/planner");
 
 const app = express();
 
@@ -45,6 +46,7 @@ app.get("/", async (req, res) => {
 
 app.use("/auth", authRoute);
 app.use("/events", eventsRoute);
+app.use("/planner", plannerRoute);
 
 app.listen(
   process.env.PORT,

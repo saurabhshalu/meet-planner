@@ -12,9 +12,9 @@ router.post("/InsertPlannerDetails", async (req, res) => {
       userObj.minimumMeetingDuration = req.body.minimumMeetingDuration;
       userObj.timeslots = req.body.timeslots;
 
-      await userModel.saveChanges(userObj);
+      await userObj.save();
 
-      return req
+      return res
         .status(200)
         .json({ success: true, message: "User details updated" });
     }
@@ -31,9 +31,28 @@ router.post("/InsertPlannerDetails", async (req, res) => {
   }
 });
 
-router.post("GenerateMeetingEvent", async (req, res) => {
+router.get("/details/:email", async (req, res) => {
   try {
-  } catch {}
+    const userData = await userModel
+      .findOne({ email: req.params.email })
+      .select("timeslots customURL minimumMeetingDuration");
+
+    if (!userData) {
+      return res
+        .status(400)
+        .json({ success: false, message: "No User Found." });
+    }
+    return res.status(200).json({
+      success: true,
+      message: userData,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Something went wrong, please try again.",
+    });
+  }
+
 });
 
 async function checkUniqueLink(linkText) {

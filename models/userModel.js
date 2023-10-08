@@ -59,11 +59,11 @@ const userSchema = mongoose.Schema({
         enum: [0, 1, 2, 3, 4, 5, 6],
       },
       startTime: {
-        type: Date,
+        type: String,
         required: true,
       },
       endTime: {
-        type: Date,
+        type: String,
         required: true,
       },
       isActive: {

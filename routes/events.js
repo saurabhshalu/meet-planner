@@ -201,4 +201,35 @@ router.get("GetAvailableTimeSlots/:userLink", async (req, res) => {
   }
 });
 
+router.post("/create", async (req, res) => {
+  try {
+    const { name, email, description, start, end, meeting_with } = req.body;
+
+    //all the logic to fetch the details of meeting_with actual email using the unique id.
+    const calendar_email = meeting_with; //change this in future.
+    const access_token = "";
+
+    const payload = {
+      summary: `Meeting with ${name}`,
+      location: "Online Meet",
+      description: description || "",
+      start: { dateTime: start },
+      end: { dateTime: end },
+      attendees: [{ email: email }],
+    };
+
+    const { data } = await axios.post(
+      `https://www.googleapis.com/calendar/v3/calendars/${calendar_email}/events?sendUpdates=all`,
+      payload,
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      }
+    );
+    if (data.htmlLink) {
+    }
+  } catch (error) {}
+});
+
 module.exports = router;
