@@ -7,6 +7,7 @@ import SlotSelection from "./SlotSelection/SlotSelection";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import EventList from "./EventComponent/Event";
+import ProtectedRoute from "./Components/ProtectedRoute";
 function App() {
   const routes = createBrowserRouter([
     {
@@ -23,11 +24,19 @@ function App() {
     },
     {
       path: "/Slots",
-      element: <SlotSelection />,
+      element: (
+        <ProtectedRoute>
+          <SlotSelection />
+        </ProtectedRoute>
+      ),
     },
     {
       path: "/dashboard",
-      element: <EventList />,
+      element: (
+        <ProtectedRoute>
+          <EventList />
+        </ProtectedRoute>
+      ),
     },
   ]);
   // const [user, setUser] = useState(null);
