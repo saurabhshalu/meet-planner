@@ -4,10 +4,12 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Register from "./Register/Register";
 import OtpVerification from "./OtpVerification/OtpVerification";
 import SlotSelection from "./SlotSelection/SlotSelection";
+
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import EventList from "./EventComponent/Event";
 import ProtectedRoute from "./Components/ProtectedRoute";
+
 function App() {
   const routes = createBrowserRouter([
     {
@@ -37,6 +39,10 @@ function App() {
           <EventList />
         </ProtectedRoute>
       ),
+    },
+    {
+      path: "/dashboard",
+      element: <EventList />,
     },
   ]);
   // const [user, setUser] = useState(null);
