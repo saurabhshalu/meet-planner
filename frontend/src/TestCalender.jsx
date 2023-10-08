@@ -44,7 +44,7 @@ function TestCalender() {
     );
   };
 
-  const handleIntervalSelect = (selectedInterval) => {
+  const handleIntervalSelect = () => {
     return true;
   };
 
