@@ -1,3 +1,3 @@
 export default function EventList() {
-  return <></>;
+  return <>List view works</>;
 }
