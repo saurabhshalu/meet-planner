@@ -1,50 +1,56 @@
+import { useState } from "react";
 import DayName from "./DayName";
 
 export default function SlotSelection() {
-  const dummyData = [
+  const [data, setData] = useState({});
+
+  const defaultData = [
     {
       dayOfWeek: 0,
-      startTime: "09:00",
-      endTime: "17:00",
+      startTime: "09:00:00",
+      endTime: "17:00:00:00",
       isAvailable: false,
     },
     {
       dayOfWeek: 1,
-      startTime: "09:00",
-      endTime: "17:00",
+      startTime: "09:00:00",
+      endTime: "17:00:00",
       isAvailable: true,
     },
     {
       dayOfWeek: 2,
-      startTime: "09:00",
-      endTime: "17:00",
+      startTime: "09:00:00",
+      endTime: "17:00:00",
       isAvailable: true,
     },
     {
       dayOfWeek: 3,
-      startTime: "09:00",
-      endTime: "17:00",
+      startTime: "09:00:00",
+      endTime: "17:00:00",
       isAvailable: true,
     },
     {
       dayOfWeek: 4,
-      startTime: "09:00",
-      endTime: "17:00",
+      startTime: "09:00:00",
+      endTime: "17:00:00",
       isAvailable: true,
     },
     {
       dayOfWeek: 5,
-      startTime: "09:00",
-      endTime: "17:00",
+      startTime: "09:00:00",
+      endTime: "17:00:00",
       isAvailable: true,
     },
     {
       dayOfWeek: 6,
-      startTime: "09:00",
-      endTime: "17:00",
+      startTime: "09:00:00",
+      endTime: "17:00:00",
       isAvailable: false,
     },
   ];
+
+  data.timeslots = defaultData;
+
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -55,10 +61,55 @@ export default function SlotSelection() {
           <main>
             <h2 className="text-lg font-bold my-2">Set your weekly hours</h2>
             <div className="flex flex-col	">
+              <span className="flex justify-between">
+                <h3 className="mb-5 text-lg font-medium text-gray-700 ">
+                  Choose a duration:
+                </h3>
+                <ul className="grid w-full gap-6 md:grid-cols-3">
+                  <li>
+                    <input
+                      type="radio"
+                      id="minimumMeetingDuration_30"
+                      value=""
+                      className="hidden peer"
+                      name="minimumMeetingDuration"
+                    />
+                    <label
+                      htmlFor="timeslot_30"
+                      className="inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border-2 border-gray-200 rounded-lg cursor-pointer  peer-checked:border-red-600 hover:text-gray-600  peer-checked:text-gray-600 hover:bg-gray-50  "
+                    >
+                      <div className="block">
+                        <div className="w-full text-lg font-semibold">
+                          30 mins
+                        </div>
+                      </div>
+                    </label>
+                  </li>
+                  <li>
+                    <input
+                      type="radio"
+                      id="minimumMeetingDuration_60"
+                      value=""
+                      className="hidden peer"
+                      name="minimumMeetingDuration"
+                    />
+                    <label
+                      htmlFor="timeslot_60"
+                      className="inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border-2 border-gray-200 rounded-lg cursor-pointer  peer-checked:border-red-600 hover:text-gray-600  peer-checked:text-gray-600 hover:bg-gray-50 "
+                    >
+                      <div className="block">
+                        <div className="w-full text-lg font-semibold">
+                          60 mins
+                        </div>
+                      </div>
+                    </label>
+                  </li>
+                </ul>
+              </span>
               <div>
                 <label
                   htmlFor="email"
-                  className="block text-sm font-medium leading-6 text-gray-900"
+                  className="block text-sm font-medium leading-6 text-gray-700"
                 >
                   Set your Custom Link
                 </label>
@@ -91,7 +142,7 @@ export default function SlotSelection() {
                 </span>
               </div>
               <table className="gap-10">
-                {dummyData.map((obj) => {
+                {defaultData.map((obj) => {
                   return (
                     <tr key={obj.dayOfWeek}>
                       <td className="my-5">
