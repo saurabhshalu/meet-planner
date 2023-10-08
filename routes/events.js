@@ -4,7 +4,9 @@ const router = require("express").Router();
 
 const axios = require("axios");
 
-router.get("/:uniqueId", async (req, res) => {
+router.get("/:uniqueId", getUserEvents);
+
+async function getUserEvents(req, res) {
   try {
     const myUser = await userModel.findOne({ email: req.params.uniqueId }); //change email to uniqueId
     console.log("MY_USER=>", myUser);
@@ -93,6 +95,109 @@ router.get("/:uniqueId", async (req, res) => {
     return res
       .status(500)
       .json({ success: false, message: "Something went wrong." });
+  }
+}
+
+router.get("GetAvailableTimeSlots/:userLink", async (req, res) => {
+  try {
+    const userLink = req.params.userLink;
+    const dayOfWeek = req.query.dayOfWeek;
+    const userObj = await userModel.findOne({ customURL: userLink });
+    if (!userObj) res.status(400).json({ success: false });
+    const timeSlotForDay = userObj?.timeslots[dayOfWeek];
+    const duration = userObj.minimumMeetingDuration * 60000; // ms
+    const userEvents = await getUserEvents();
+
+    const bookedSlot = [];
+    userEvents?.items?.forEach((items) => {
+      let data = {
+        startTime: "",
+        endTime: "",
+      };
+
+      data.startTime = items.start.dateTime;
+      data.endTime = items.end.dateTime;
+      if (areDatesEqual(new Date(data.startTime), startTime)) {
+        bookedSlot.push(data);
+      }
+    });
+
+    const slots = calculateTimeSlots(
+      timeSlotForDay.startTime,
+      timeSlotForDay.endTime,
+      duration,
+      bookedSlot
+    );
+
+    function areDatesInRange(startDate, endDate, dateRanges) {
+      const givenStart = new Date(startDate);
+      const givenEnd = new Date(endDate);
+
+      dateRanges.forEach((date) => {
+        const start = new Date(date.startTime);
+        const end = new Date(date.endTime);
+
+        if (
+          (givenStart >= start && givenStart <= end) ||
+          (givenEnd >= start && givenEnd <= end)
+        ) {
+          // if (givenStart >= start && givenEnd <= end) {
+          return true; // Start and end dates are within one of the date ranges
+        }
+      });
+
+      return false; // Start and end dates are not within any of the date ranges
+    }
+
+    function areDatesBetweenDatetime(startDatetime, endDatetime, dateList) {
+      const startDate = new Date(startDatetime);
+      const endDate = new Date(endDatetime);
+      let sta = false;
+      dateList.filter((date) => {
+        const currentStartDate = new Date(date.startTime);
+        const currentEndDate = new Date(date.endTime);
+        if (
+          (currentStartDate >= startDate && currentStartDate <= endDate) ||
+          (currentEndDate >= startDate && currentEndDate <= endDate)
+        ) {
+          sta = true;
+        }
+      });
+      return sta;
+    }
+
+    function areDatesEqual(dateA, dateB) {
+      return (
+        dateA.getFullYear() === dateB.getFullYear() &&
+        dateA.getMonth() === dateB.getMonth() &&
+        dateA.getDate() === dateB.getDate()
+      );
+    }
+
+    function calculateTimeSlots(startTime, endTime, slotDuration, bookedSlot) {
+      const slots = [];
+      let currentTime = new Date(startTime);
+
+      while (currentTime <= endTime) {
+        const slotEndTime = new Date(currentTime.getTime() + slotDuration);
+        if (!areDatesInRange(currentTime, slotEndTime, bookedSlot)) {
+          if (!areDatesBetweenDatetime(currentTime, slotEndTime, bookedSlot)) {
+            slots.push({
+              startTime: new Date(currentTime),
+              endTime: slotEndTime,
+            });
+          }
+        }
+        currentTime = slotEndTime;
+      }
+
+      res.status(200).json({ success: true, data: slots });
+    }
+  } catch (ex) {
+    return res.status(500).json({
+      success: false,
+      message: "Cannot fetch user info, please try again later",
+    });
   }
 });
 

@@ -52,6 +52,7 @@ router.get("/details/:email", async (req, res) => {
       message: "Something went wrong, please try again.",
     });
   }
+
 });
 
 async function checkUniqueLink(linkText) {
