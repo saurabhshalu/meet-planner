@@ -9,6 +9,7 @@ router.post("/InsertPlannerDetails", async (req, res) => {
       const userObj = await userModel.findOne(filter);
 
       userObj.customURL = req.body.uniqueLink;
+      userObj.minimumMeetingDuration = req.body.minimumMeetingDuration;
       userObj.timeslots = req.body.timeslots;
 
       await userModel.saveChanges(userObj);
@@ -23,12 +24,10 @@ router.post("/InsertPlannerDetails", async (req, res) => {
       .json({ success: false, message: "Link text already exists" });
   } catch (ex) {
     console.log(ex);
-    res
-      .status(500)
-      .json({
-        success: false,
-        message: "There seems to be an issue, please try again",
-      });
+    res.status(500).json({
+      success: false,
+      message: "There seems to be an issue, please try again",
+    });
   }
 });
 

@@ -63,10 +63,10 @@ export default function SlotSelection() {
                   <li>
                     <input
                       type="radio"
-                      id="timeslot_30"
+                      id="minimumMeetingDuration_30"
                       value=""
                       className="hidden peer"
-                      name="timeslot"
+                      name="minimumMeetingDuration"
                     />
                     <label
                       htmlFor="timeslot_30"
@@ -82,10 +82,10 @@ export default function SlotSelection() {
                   <li>
                     <input
                       type="radio"
-                      id="timeslot_60"
+                      id="minimumMeetingDuration_60"
                       value=""
                       className="hidden peer"
-                      name="timeslot"
+                      name="minimumMeetingDuration"
                     />
                     <label
                       htmlFor="timeslot_60"
