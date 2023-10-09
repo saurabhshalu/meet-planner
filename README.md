@@ -28,7 +28,10 @@
        http://localhost:8000/auth/google/callback
        ```
        From here you'll get your Google Client secret and client Id
-  - Google OAuth consent screen with following scopes 1. .../auth/userinfo.email 2. .../auth/userinfo.profile 3. .../auth/calendar.events
+  - Google OAuth consent screen with following scopes
+    1. .../auth/userinfo.email
+    2. .../auth/userinfo.profile
+    3. .../auth/calendar.events
   - MongoDB database
 
 ##### NOTE: IF you're using a unverified Google Credentials for app you'll also need to add list of emails you'll be using to test the application inside Oauth consert screen in Google cloud console under Test users section
