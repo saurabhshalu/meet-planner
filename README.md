@@ -24,8 +24,8 @@
        ```
     2. Authorized redirect URIs
        ```url
-       	http://localhost:5173
-       	http://localhost:8000/auth/google/callback
+       http://localhost:5173
+       http://localhost:8000/auth/google/callback
        ```
        From here you'll get your Google Client secret and client Id
   - Google OAuth consent screen with following scopes 1. .../auth/userinfo.email 2. .../auth/userinfo.profile 3. .../auth/calendar.events
