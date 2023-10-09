@@ -1,3 +1,4 @@
+/* eslint-disable no-const-assign */
 import { useState } from "react";
 import WeekCalendar from "react-week-calendar";
 import "react-week-calendar/dist/style.less";
@@ -44,7 +45,7 @@ function TestCalender() {
     );
   };
 
-  const handleIntervalSelect = (selectedInterval) => {
+  const handleIntervalSelect = () => {
     return true;
   };
 

@@ -1,7 +1,9 @@
 const passport = require("passport");
+const userModel = require("./models/userModel");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const MicrosoftStrategy = require("passport-microsoft").Strategy;
 const LocalStrategy = require("passport-local").Strategy;
+const md5 = require("md5");
 
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
@@ -46,19 +48,24 @@ passport.use(
 );
 
 passport.use(
-  new LocalStrategy(function (username, password, done) {
-    User.findOne({ username: username }, function (err, user) {
-      if (err) {
-        return done(err);
-      }
-      if (!user) {
+  new LocalStrategy(async (username, password, done) => {
+    try {
+      const myUser = await userModel.findOne({ email: username });
+      console.log("myUser--->", myUser);
+
+      if (!myUser) {
         return done(null, false);
       }
-      if (!user.verifyPassword(password)) {
+      if (myUser.password !== md5(password)) {
         return done(null, false);
       }
-      return done(null, user);
-    });
+      return done(null, {
+        displayName: myUser.displayName,
+        email: myUser.email,
+      });
+    } catch (error) {
+      return done(error);
+    }
   })
 );
 
